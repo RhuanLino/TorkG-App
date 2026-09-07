@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="kaizen-app/assets/logos/logo.png" alt="TorkG" width="600">
+  <img src="torkg-app/assets/logos/logo.png" alt="TorkG" width="600">
 
   Aplicação mobile em React Native para o universo automotivo. O **TorkG** parte de um catálogo demonstrativo de autopeças e evolui para a visão de um hub que aproxima pessoas de seus veículos, produtos, manutenção e conteúdo especializado.
 
@@ -68,16 +68,17 @@ Tecnologias e bibliotecas identificadas no repositório:
 
 ## 🗂️ Estrutura do projeto
 
-O código da aplicação está em um subdiretório do repositório, identificado pelo arquivo `package.json`:
+O código da aplicação está no diretório `torkg-app/`:
 
 ```text
-app/              # Rotas e telas gerenciadas pelo Expo Router
-└── (tabs)/        # Telas e configuração da navegação por abas
-components/       # Componentes reutilizáveis e elementos de interface
-assets/           # Imagens, logos e recursos estáticos
-constants/        # Constantes de tema
-hooks/            # Hooks de tema e esquema de cores
-scripts/          # Scripts auxiliares do projeto
+torkg-app/
+├── app/              # Rotas e telas gerenciadas pelo Expo Router
+│   └── (tabs)/        # Telas e configuração da navegação por abas
+├── components/       # Componentes reutilizáveis e elementos de interface
+├── assets/           # Imagens, logos e recursos estáticos
+├── constants/        # Constantes de tema
+├── hooks/            # Hooks de tema e esquema de cores
+└── scripts/          # Scripts auxiliares do projeto
 ```
 
 ## ▶️ Como executar
@@ -92,7 +93,7 @@ scripts/          # Scripts auxiliares do projeto
 
 ```bash
 git clone <URL_DO_REPOSITORIO>
-cd <diretório-que-contém-o-package.json>
+cd torkg-app
 npm install
 ```
 
