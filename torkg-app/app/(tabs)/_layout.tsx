@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import {AnimatedTabIcon } from '@/components/ui/animatedTabIcon';
+import { CarFront, House, Package, ShoppingCart } from 'lucide-react-native';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -15,27 +15,36 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: 'Início',
           tabBarIcon: ({ color, focused }) => (
-            <AnimatedTabIcon color={color} focused={focused} name="house.fill" />
+            <House size={20} color="#ff4e00" strokeWidth={1.7} />
           ),
         }}
       />
       <Tabs.Screen
         name="products"
         options={{
-          title: 'Produtos',
+          title: 'Peças',
           tabBarIcon: ({ color, focused }) => (
-            <AnimatedTabIcon color={color} focused={focused} name="bag.fill" />
+            <Package size={20} color="#ff4e00" strokeWidth={1.7} />
           ),
         }}
       />
       <Tabs.Screen
-        name="config"
+        name="my-car"
         options={{
-          title: 'Configurações',
+          title: 'Meu carro',
           tabBarIcon: ({ color, focused }) => (
-            <AnimatedTabIcon color={color} focused={focused} name="gearshape.fill" />
+            <CarFront size={20} color="#ff4e00" strokeWidth={1.7} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="cart"
+        options={{
+          title: 'Carrinho',
+          tabBarIcon: ({ color, focused }) => (
+            <ShoppingCart size={20} color="#ff4e00" strokeWidth={1.7} />
           ),
         }}
       />
