@@ -1,6 +1,9 @@
 import { Tabs } from 'expo-router';
+import { View } from 'react-native';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { CarFront, House, Package, ShoppingCart } from 'lucide-react-native';
+import { AnimatedTabButton } from '@/components/ui/animated-tab-button';
+import CountBadge from '@/components/ui/count-badge';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -8,8 +11,9 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "rgba(0,165,172,0.8)",
+        tabBarActiveTintColor: "#ff4e00",
         headerShown: false,
+        tabBarButton: (props) => <AnimatedTabButton {...props} />,
       }}
     >
       <Tabs.Screen
@@ -44,7 +48,10 @@ export default function TabLayout() {
         options={{
           title: 'Carrinho',
           tabBarIcon: ({ color, focused }) => (
-            <ShoppingCart size={20} color="#ff4e00" strokeWidth={1.7} />
+            <View style={{ position: "relative" }}>
+              <ShoppingCart size={20} color="#ff4e00" strokeWidth={1.7} />
+              <CountBadge count={2} />
+            </View>
           ),
         }}
       />

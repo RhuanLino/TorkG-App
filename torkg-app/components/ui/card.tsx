@@ -9,14 +9,16 @@ import type { ReactNode } from "react";
 interface CardProps {
     width: DimensionValue;
     height: DimensionValue;
-    borderColor: ColorValue;
+    backgroundColor?: ColorValue;
+    borderColor?: ColorValue;
     children: ReactNode;
 }
 
 export default function Card({
     width,
     height,
-    borderColor,
+    backgroundColor = "#15181b",
+    borderColor = "rgba(0,0,0,0)",
     children,
 }: CardProps) {
     return (
@@ -24,31 +26,15 @@ export default function Card({
             style={{
                 width,
                 height,
-                minHeight: 180,
                 padding: 18,
                 position: "relative",
                 overflow: "hidden",
                 borderWidth: 1,
                 borderColor,
                 borderRadius: 24,
-                backgroundColor: "#15181b",
+                backgroundColor,
             }}
         >
-            {/* Elemento decorativo equivalente ao ::after */}
-            <View
-                pointerEvents="none"
-                style={{
-                    position: "absolute",
-                    width: 210,
-                    height: 210,
-                    right: -93,
-                    bottom: -110,
-                    borderWidth: 34,
-                    borderColor: "rgba(255, 78, 0, 0.08)",
-                    borderRadius: 105,
-                }}
-            />
-
             <View
                 style={{
                     flex: 1,

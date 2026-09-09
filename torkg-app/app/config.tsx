@@ -18,7 +18,7 @@ export default function ConfigScreen() {
       }>
       <ThemedView>
         <View style={{ alignItems: "center", marginTop: 5, marginBottom: 30 }}>
-          <Image source={require('@/assets/logos/logo_kzn.png')} style={{ width: 230, height: 80 }}></Image>
+          <Image source={require('@/assets/logos/logo.png')} style={{ width: 230, height: 80 }}></Image>
         </View>
         
         <ThemedView darkColor="rgba(43, 43, 43, 0.53)" style={{ alignItems: "center", flexDirection: "row", borderRadius: 15, padding: 15 }}>

@@ -1,14 +1,13 @@
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
 import { useColorScheme } from '@/hooks/use-color-scheme.web';
 import { Image } from 'expo-image';
-import { useRouter } from "expo-router";
-import { Button, ScrollView, Text, View, Pressable } from 'react-native';
-import { CarFront, Gauge } from "lucide-react-native";
-import ProductContainer from '@/components/productContainer';
+import { useRouter, type Href } from "expo-router";
+import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Bell, CarFront, FileSearchCorner, Gauge, Package, Wrench } from "lucide-react-native";
 
-import Carousel from '@/components/carousel';
+import Button from '@/components/ui/button';
 import Card from '@/components/ui/card';
+import CountBadge from '@/components/ui/count-badge';
 
 export default function HomeScreen() {
 
@@ -63,14 +62,90 @@ export default function HomeScreen() {
         },
     ];
 
+    const acessoRapido = [
+        {
+            title: 'Catálogo de peças',
+            icon: 'package',
+            route: '/products' as Href
+        },
+        {
+            title: 'Histórico de manutenção',
+            icon: 'wrench',
+            route: '/maintenance-history' as Href
+        },
+        {
+            title: 'Ficha técnica',
+            icon: 'file-search-corner',
+            route: '/technical-sheet' as Href
+        }
+    ]
+
+    const vehicle = {
+        id: '...',
+        user_id: '...',
+        vehicle_version: 'Vectra GLS 2.0 8V',
+        nickname: 'Meu Vectra',
+        plate: 'ABC1D23',
+        manufacture_year: 2000,
+        model_year: 2000,
+        color: 'Prata',
+        mileage: 168450,
+        is_primary: true,
+        photo_path: null,
+        created_at: '...',
+        updated_at: '...',
+    };
+
+    const manutencao = {
+        id: '4a6759be-2e88-4b84-8371-9712052c8b12',
+        vehicle_id: 'c0b52e36-1f78-48a6-b64c-9c6ad1d53209',
+        category_id: '1fc47c4d-5821-422b-a03d-ecf45cc483d1',
+        title: 'Troca de óleo',
+        description: 'Troca de óleo do motor e filtro de óleo.',
+        performed_at: '2026-07-10',
+        mileage: 165950,
+        cost: 245.9,
+        workshop_name: 'Oficina Kaizen',
+        next_due_date: '2027-01-10',
+        next_due_mileage: 170950,
+        created_at: '2026-07-10T14:30:00.000Z',
+        updated_at: '2026-07-10T14:30:00.000Z',
+    };
+
     return (
         <View style={{ flex: 1 }}>
-            <ThemedView style={{ height: 60, flexDirection: "row", alignItems: "center", justifyContent: "center", borderBottomLeftRadius: 8, borderBottomRightRadius: 8 }}>
-                <Image source={require('@/assets/logos/logo_kzn.png')} style={{ width: 130, height: 50 }}></Image>
-            </ThemedView>
+            <ScrollView showsVerticalScrollIndicator={false} style={{ margin: 20 }}>
+                <View style={{ position: "absolute", right: 0, top: 0, zIndex: 1 }}>
+                    <Button
+                        width={60}
+                        height={60}
+                        borderColor="#424242"
+                        onPress={() => router.push("/notifications")}
+                    >
+                        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+                            <CountBadge count={2} />
+                            <Bell size={20} color="#ffffff" strokeWidth={1.7} />
+                        </View>
+                    </Button>
+                </View>
 
-            <ScrollView style={{ margin: 20 }}>
-                <Card width={300} height={200} borderColor="rgba(0,165,172,0.8)">
+                <ThemedText style={{ fontSize: 16, marginLeft: 10, color: "#a9abad" }}>Olá, Rhuan!</ThemedText>
+                <Image source={require('@/assets/logos/logo.png')} style={{ width: 170, height: 60, marginVertical: 5 }}></Image>
+                <Card width={'auto'} height={200} borderColor="#ff4e00">
+                    {/* Elemento decorativo equivalente ao ::after */}
+                    <View
+                        pointerEvents="none"
+                        style={{
+                            position: "absolute",
+                            width: 260,
+                            height: 260,
+                            right: -93,
+                            bottom: -110,
+                            borderWidth: 34,
+                            borderColor: "rgba(255, 78, 0, 0.08)",
+                            borderRadius: 150,
+                        }}
+                    />
                     <View
                         style={{
                             flexDirection: "row",
@@ -88,7 +163,7 @@ export default function HomeScreen() {
                                     marginBottom: 4,
                                 }}
                             >
-                                Meu veículo • 2000
+                                {vehicle.nickname} • {vehicle.manufacture_year}
                             </Text>
 
                             <Text
@@ -98,7 +173,7 @@ export default function HomeScreen() {
                                     fontWeight: "700",
                                 }}
                             >
-                                Chevrolet Vectra GLS
+                                {vehicle.vehicle_version}
                             </Text>
                         </View>
 
@@ -152,7 +227,7 @@ export default function HomeScreen() {
                                 fontWeight: "700",
                             }}
                         >
-                            168.450 km
+                            {vehicle.mileage.toLocaleString()} km
                         </Text>
                     </View>
                 </Card>
@@ -161,21 +236,82 @@ export default function HomeScreen() {
                     <Carousel data={anuncios} />
                 </View> */}
 
-                <Text style={{ marginTop: 30, fontWeight: "bold", fontSize: 30, textAlign: "center", color: "rgba(0,165,172,0.8)" }}>Produtos</Text>
+                <ThemedText style={{ marginVertical: 30, fontWeight: "bold", fontSize: 18 }}>Acesso rápido</ThemedText>
 
-                <ThemedView style={{ flex: 1, alignItems: "center", justifyContent: "center", borderTopRightRadius: 15, borderTopLeftRadius: 15, marginTop: 20, padding: 20 }}>
-                    <ProductContainer products={products} />
-                </ThemedView>
+                {/* Slider acesso rápido */}
+                <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    style={{ height: 160, flexGrow: 0, flexShrink: 0 }}
+                    contentContainerStyle={{ gap: 10 }}
+                >
+                    {acessoRapido.map((item) => (
+                        <Button
+                            width={126}
+                            height={160}
+                            borderColor="#424242"
+                            onPress={() => router.push(item.route)}
+                            key={typeof item.route === 'string' ? item.route : item.route.pathname}
+                        >
+                            <View style={{ flex: 1, alignItems: "flex-start", justifyContent: "flex-start" }}>
+                                <Card width={60} height={60} backgroundColor="#ff4d0028">
+                                    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+                                        {item.icon === 'package' && <Package size={30} color="#ff4e00" strokeWidth={1.7} />}
+                                        {item.icon === 'wrench' && <Wrench size={30} color="#ff4e00" strokeWidth={1.7} />}
+                                        {item.icon === 'file-search-corner' && <FileSearchCorner size={30} color="#ff4e00" strokeWidth={1.7} />}
+                                    </View>
+                                </Card>
+                            </View>
+                            <ThemedText style={{ fontSize: 14, fontWeight: "bold" }}>{item.title}</ThemedText>
+                        </Button>
+                    ))}
+                </ScrollView>
 
-                <View style={{
-                    alignItems: "center",
-                    justifyContent: "center",
-                    height: 50,
-                    backgroundColor: "rgba(0,165,172,0.8)",
-                    borderBottomRightRadius: 15,
-                    borderBottomLeftRadius: 15
-                }}>
-                    <Button title="Mais Produtos" onPress={() => router.push("/products")} color="rgba(0,0,0,0)" />
+                {/* Próxima manutenção container */}
+                <View>
+                    <ThemedText style={{ marginVertical: 30, fontWeight: "bold", fontSize: 18 }}>Próxima manutenção</ThemedText>
+
+                    <Card width={'auto'} height={'auto'} borderColor="#ff8800">
+                        <View style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "flex-start" }}>
+
+                            <Card width={60} height={60} backgroundColor="#ff880025">
+                                <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+                                    <FileSearchCorner size={30} color="#ff8800" strokeWidth={1.7} />
+                                </View>
+                            </Card>
+                            <View style={{ flex: 1, marginLeft: 15, justifyContent: "center", alignItems: "flex-start" }}>
+                                <ThemedText style={{ fontSize: 14, fontWeight: "bold", marginBottom: 5 }}>{manutencao.title}</ThemedText>
+                                <ThemedText style={{ fontSize: 12, color: "#a9abad" }}>{manutencao.description}</ThemedText>
+                            </View>
+                            <View style={{ flex: 1, justifyContent: "center", alignItems: "flex-end" }}>
+                                <ThemedText style={{ fontSize: 14, fontWeight: "bold", color: "#ff8800" }}>{manutencao.next_due_mileage}km</ThemedText>
+                                <ThemedText style={{ fontSize: 12, color: "#ff8800" }}>para nova troca</ThemedText>
+                            </View>
+                        </View>
+                    </Card>
+                </View>
+
+                {/* Para seu {veículo} */}
+                <View>
+                    <ThemedText style={{ marginVertical: 30, fontWeight: "bold", fontSize: 18 }}>Para seu {vehicle.nickname}</ThemedText>
+
+                    <Card width={'auto'} height={'auto'} borderColor="#ff8800">
+                        <View style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "flex-start" }}>
+
+                            <Card width={60} height={60} backgroundColor="#ff880025">
+                                <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+                                    <FileSearchCorner size={30} color="#ff8800" strokeWidth={1.7} />
+                                </View>
+                            </Card>
+                            <View style={{ flex: 1, marginLeft: 15, justifyContent: "center", alignItems: "flex-start" }}>
+                                <ThemedText style={{ fontSize: 14, fontWeight: "bold", marginBottom: 5 }}>Kit pastilha de freio dianteira</ThemedText>
+                                <ThemedText style={{ fontSize: 12, color: "#a9abad" }}>Compatível com Vectra GLS 2.0 8V</ThemedText>
+                            </View>
+                            <View style={{ flex: 1, justifyContent: "center", alignItems: "flex-end" }}>
+                                <ThemedText style={{ fontSize: 14, fontWeight: "bold", color: "#ff8800" }}>R$ 189,00</ThemedText>
+                            </View>
+                        </View>
+                    </Card>
                 </View>
             </ScrollView>
         </View>
