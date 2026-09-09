@@ -21,7 +21,7 @@ export default function TabLayout() {
         options={{
           title: 'Início',
           tabBarIcon: ({ color, focused }) => (
-            <House size={20} color="#ff4e00" strokeWidth={1.7} />
+            <House size={20} color={color} strokeWidth={1.7} />
           ),
         }}
       />
@@ -30,7 +30,7 @@ export default function TabLayout() {
         options={{
           title: 'Peças',
           tabBarIcon: ({ color, focused }) => (
-            <Package size={20} color="#ff4e00" strokeWidth={1.7} />
+            <Package size={20} color={color} strokeWidth={1.7} />
           ),
         }}
       />
@@ -39,7 +39,7 @@ export default function TabLayout() {
         options={{
           title: 'Meu carro',
           tabBarIcon: ({ color, focused }) => (
-            <CarFront size={20} color="#ff4e00" strokeWidth={1.7} />
+            <CarFront size={20} color={color} strokeWidth={1.7} />
           ),
         }}
       />
@@ -49,7 +49,7 @@ export default function TabLayout() {
           title: 'Carrinho',
           tabBarIcon: ({ color, focused }) => (
             <View style={{ position: "relative" }}>
-              <ShoppingCart size={20} color="#ff4e00" strokeWidth={1.7} />
+              <ShoppingCart size={20} color={color} strokeWidth={1.7} />
               <CountBadge count={2} />
             </View>
           ),

@@ -13,6 +13,8 @@ interface ButtonProps {
   height: DimensionValue;
   backgroundColor?: ColorValue;
   borderColor?: ColorValue;
+  borderRadius?: number;
+  padding?: number;
   children: ReactNode;
   onPress?: PressableProps["onPress"];
 }
@@ -22,6 +24,8 @@ export default function Button({
   height,
   backgroundColor = "#15181b",
   borderColor = "rgba(0,0,0,0)",
+  borderRadius = 24,
+  padding = 18,
   children,
   onPress,
 }: ButtonProps) {
@@ -44,12 +48,12 @@ export default function Button({
         style={{
           width,
           height,
-          padding: 18,
+          padding,
           position: "relative",
           overflow: "hidden",
           borderWidth: 1,
           borderColor,
-          borderRadius: 24,
+          borderRadius,
           backgroundColor,
         }}
       >

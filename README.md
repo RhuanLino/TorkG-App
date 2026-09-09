@@ -65,6 +65,8 @@ Tecnologias e bibliotecas identificadas no repositório:
 - Expo Image, Expo Linking e Expo WebBrowser
 - React Native Reanimated e Gesture Handler
 - ESLint com configuração do Expo
+- Spring Boot 3.5 (API REST em `torkg-api/`)
+- Spring Security Resource Server para validação de JWT do Supabase
 
 ## 🗂️ Estrutura do projeto
 
@@ -80,6 +82,8 @@ torkg-app/
 ├── hooks/            # Hooks de tema e esquema de cores
 └── scripts/          # Scripts auxiliares do projeto
 ```
+
+A API está no diretório `torkg-api/`. Ela mantém as rotas de negócio protegidas por padrão e valida os access tokens emitidos pelo Supabase. Consulte [torkg-api/README.md](torkg-api/README.md) para a configuração e as variáveis necessárias.
 
 ## ▶️ Como executar
 
