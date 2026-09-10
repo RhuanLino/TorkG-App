@@ -19,7 +19,7 @@ export async function getPrimaryVehicle(accessToken: string): Promise<PrimaryVeh
     throw new Error('Defina EXPO_PUBLIC_TORKG_API_URL no arquivo .env do app.');
   }
 
-  const response = await fetch(`${apiUrl}/api/v1/vehicles/primary`, {
+  const response = await fetch(`${apiUrl}/api/v1/vehicle/primary`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
       Accept: 'application/json',

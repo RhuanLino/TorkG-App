@@ -6,17 +6,9 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
 ## Autenticação e API local
 
-Copie `.env.example` para `.env` e preencha a chave publishable do Supabase:
+Copie `.env.example` para `.env` e preencha a chave publishable do Supabase. Use `http://10.0.2.2:8080` no emulador Android, `http://localhost:8080` no navegador ou o IP local do computador no Expo Go em celular físico.
 
-```env
-EXPO_PUBLIC_SUPABASE_URL=https://cxcldpebgsbuennopnas.supabase.co
-EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_sua-chave
-EXPO_PUBLIC_TORKG_API_URL=http://10.0.2.2:8080
-```
-
-Para o Expo Go em um celular físico, substitua `10.0.2.2` pelo IP local do computador na mesma rede, por exemplo `http://192.168.0.10:8080`. No navegador, use `http://localhost:8080`.
-
-O app abre em `login` sem uma sessão válida. Após entrar, ele envia o access token do Supabase para `GET /api/v1/vehicles/primary` e exibe o veículo marcado como `is_primary` na Home.
+Sem uma sessão válida, o app exibe apenas a tela de login. Depois do login, ele envia o access token ao endpoint `GET /api/v1/vehicles/primary` e mostra o veículo principal na Home.
 
 1. Install dependencies
 

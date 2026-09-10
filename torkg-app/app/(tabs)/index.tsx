@@ -1,5 +1,4 @@
 import { ThemedText } from '@/components/themed-text';
-import { useColorScheme } from '@/hooks/use-color-scheme.web';
 import { Image } from 'expo-image';
 import { useRouter, type Href } from "expo-router";
 import { useEffect, useState } from 'react';
@@ -10,11 +9,11 @@ import Button from '@/components/ui/button';
 import Card from '@/components/ui/card';
 import CountBadge from '@/components/ui/count-badge';
 import { getPrimaryVehicle, type PrimaryVehicle } from '@/lib/api';
+import { getVehiclePhotoUrl } from '@/lib/supabase';
 import { useAuth } from '@/providers/auth-provider';
 
 export default function HomeScreen() {
 
-    const colorScheme = useColorScheme();
     const router = useRouter();
     const { session, user } = useAuth();
     const [primaryVehicle, setPrimaryVehicle] = useState<PrimaryVehicle | null>(null);
@@ -30,9 +29,9 @@ export default function HomeScreen() {
 
             setIsLoadingVehicle(true);
             try {
-                const vehicle = await getPrimaryVehicle(session.access_token);
+                const nextVehicle = await getPrimaryVehicle(session.access_token);
                 if (isCurrent) {
-                    setPrimaryVehicle(vehicle);
+                    setPrimaryVehicle(nextVehicle);
                 }
             } catch {
                 if (isCurrent) {
@@ -51,71 +50,11 @@ export default function HomeScreen() {
         };
     }, [session?.access_token]);
 
-    const anuncios = [
-        {
-            id: 1,
-            image: require('@/assets/images/ads/pecas_velhas.jpg'),
-            url: 'https://kaizen.com.br',
-            title: 'Peças Kaizen com Desconto'
-        },
-        {
-            id: 2,
-            image: require('@/assets/images/ads/fixing.jpg'),
-            url: 'https://kaizen.com.br',
-            title: 'Serviços de Manutenção'
-        },
-        {
-            id: 3,
-            image: require('@/assets/images/ads/unidade_kzn.webp'),
-            url: 'https://kaizen.com.br',
-            title: 'Visite Nossa Loja Física'
-        }
-    ];
-
-    const products = [
-        {
-            id: 1,
-            name: 'Amortecedor',
-            image: require('@/assets/images/products/amortecedor.png'),
-            price: "399,90"
-        },
-        {
-            id: 2,
-            name: 'Pastilha de Freio',
-            image: require('@/assets/images/products/pastilha.png'),
-            price: "299,90"
-        },
-        {
-            id: 3,
-            name: 'Limpador de Parabrisa',
-            image: require('@/assets/images/products/limpador_parabrisa.png'),
-            price: "85,99"
-        },
-        {
-            id: 4,
-            name: 'Disco de Freio',
-            image: require('@/assets/images/products/disco_freio.png'),
-            price: "249,90"
-        },
-    ];
-
     const acessoRapido = [
-        {
-            title: 'Catálogo de peças',
-            icon: 'package',
-            route: '/products' as Href
-        },
-        {
-            title: 'Histórico de manutenção',
-            icon: 'wrench',
-            route: '/maintenance-history' as Href
-        },
-        {
-            title: 'Ficha técnica',
-            icon: 'file-search-corner',
-            route: '/technical-sheet' as Href
-        }
-    ]
+        { title: 'Catálogo de peças', icon: 'package', route: '/products' as Href },
+        { title: 'Histórico de manutenção', icon: 'wrench', route: '/maintenance-history' as Href },
+        { title: 'Ficha técnica', icon: 'file-search-corner', route: '/my-car' as Href },
+    ];
 
     const vehicle = primaryVehicle
         ? {
@@ -125,24 +64,20 @@ export default function HomeScreen() {
                 .filter(Boolean)
                 .join(' '),
             mileage: primaryVehicle.mileage,
+            photoUrl: getVehiclePhotoUrl(primaryVehicle.photoPath),
         }
         : null;
-    const firstName = user?.user_metadata.full_name?.split(' ')[0] ?? user?.email?.split('@')[0] ?? 'motorista';
 
+    const firstName = user?.user_metadata.full_name?.split(' ')[0] ?? user?.email?.split('@')[0] ?? 'motorista';
     const manutencao = {
-        id: '4a6759be-2e88-4b84-8371-9712052c8b12',
-        vehicle_id: 'c0b52e36-1f78-48a6-b64c-9c6ad1d53209',
-        category_id: '1fc47c4d-5821-422b-a03d-ecf45cc483d1',
         title: 'Troca de óleo',
         description: 'Troca de óleo do motor e filtro de óleo.',
-        performed_at: '2026-07-10',
-        mileage: 165950,
-        cost: 245.9,
-        workshop_name: 'Oficina Kaizen',
-        next_due_date: '2027-01-10',
-        next_due_mileage: 170950,
-        created_at: '2026-07-10T14:30:00.000Z',
-        updated_at: '2026-07-10T14:30:00.000Z',
+        nextDueMileage: 170950,
+    };
+    const recommendedProduct = {
+        name: 'Kit pastilha de freio dianteira',
+        description: 'Compatível com Vectra GLS 2.0 8V',
+        price: 'R$ 189,00',
     };
 
     return (
@@ -247,7 +182,15 @@ export default function HomeScreen() {
                                     justifyContent: "center",
                                 }}
                             >
-                                <CarFront size={58} color="#ff4e00" strokeWidth={1.7} />
+                                {vehicle.photoUrl ? (
+                                    <Image
+                                        source={{ uri: vehicle.photoUrl }}
+                                        contentFit="cover"
+                                        style={{ width: 110, height: 72, borderRadius: 10 }}
+                                    />
+                                ) : (
+                                    <CarFront size={58} color="#ff4e00" strokeWidth={1.7} />
+                                )}
                             </View>
 
                             <View
@@ -332,7 +275,7 @@ export default function HomeScreen() {
                                 <ThemedText style={{ fontSize: 12, color: "#a9abad" }}>{manutencao.description}</ThemedText>
                             </View>
                             <View style={{ flex: 1, justifyContent: "center", alignItems: "flex-end" }}>
-                                <ThemedText style={{ fontSize: 14, fontWeight: "bold", color: "#ff8800" }}>{manutencao.next_due_mileage}km</ThemedText>
+                                <ThemedText style={{ fontSize: 14, fontWeight: "bold", color: "#ff8800" }}>{manutencao.nextDueMileage}km</ThemedText>
                                 <ThemedText style={{ fontSize: 12, color: "#ff8800" }}>para nova troca</ThemedText>
                             </View>
                         </View>
@@ -352,11 +295,11 @@ export default function HomeScreen() {
                                 </View>
                             </Card>
                             <View style={{ flex: 1, marginLeft: 15, justifyContent: "center", alignItems: "flex-start" }}>
-                                <ThemedText style={{ fontSize: 14, fontWeight: "bold", marginBottom: 5 }}>Kit pastilha de freio dianteira</ThemedText>
-                                <ThemedText style={{ fontSize: 12, color: "#a9abad" }}>Compatível com Vectra GLS 2.0 8V</ThemedText>
+                                <ThemedText style={{ fontSize: 14, fontWeight: "bold", marginBottom: 5 }}>{recommendedProduct.name}</ThemedText>
+                                <ThemedText style={{ fontSize: 12, color: "#a9abad" }}>{recommendedProduct.description}</ThemedText>
                             </View>
                             <View style={{ flex: 1, justifyContent: "center", alignItems: "flex-end" }}>
-                                <ThemedText style={{ fontSize: 14, fontWeight: "bold", color: "#ff8800" }}>R$ 189,00</ThemedText>
+                                <ThemedText style={{ fontSize: 14, fontWeight: "bold", color: "#ff8800" }}>{recommendedProduct.price}</ThemedText>
                             </View>
                         </View>
                     </Card>
