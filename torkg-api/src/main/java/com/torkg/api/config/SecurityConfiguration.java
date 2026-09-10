@@ -8,6 +8,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -49,7 +50,14 @@ public class SecurityConfiguration {
         String supabaseUrl = requireSupabaseUrl(properties.url());
         NimbusJwtDecoder decoder = NimbusJwtDecoder.withJwkSetUri(
                 supabaseUrl + "/auth/v1/.well-known/jwks.json"
-        ).build();
+        )
+                // O Spring aceita RS256 por padrao; o Supabase recomenda ES256.
+                // Os dois algoritmos assimetricos permitem rotacao de chave sem indisponibilidade.
+                .jwsAlgorithms(algorithms -> {
+                    algorithms.add(SignatureAlgorithm.ES256);
+                    algorithms.add(SignatureAlgorithm.RS256);
+                })
+                .build();
         decoder.setJwtValidator(JwtValidators.createDefaultWithIssuer(supabaseUrl + "/auth/v1"));
         return decoder;
     }
